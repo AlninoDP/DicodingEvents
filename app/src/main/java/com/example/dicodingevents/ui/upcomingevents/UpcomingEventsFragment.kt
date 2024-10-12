@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,11 +24,18 @@ class UpcomingEventsFragment : Fragment() {
     ): View {
         _binding = FragmentUpcomingEventsBinding.inflate(inflater, container, false)
 
-        val layoutManager = LinearLayoutManager(this@UpcomingEventsFragment.context)
+
+        //layout manager
+        val layoutManager = LinearLayoutManager(requireActivity())
         binding.rvUpcomingEvents.layoutManager = layoutManager
 
+
+        // Observer
         upcomingEventsViewModel.listEventsItem.observe(viewLifecycleOwner){
             setEventsData(it)
+        }
+        upcomingEventsViewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it)
         }
 
         return binding.root
@@ -42,9 +48,19 @@ class UpcomingEventsFragment : Fragment() {
     }
 
 
-    private fun setEventsData (events: List<ListEventsItem?>?){
+    private fun setEventsData (events: List<ListEventsItem>){
         val adapter = EventAdapter(events)
         binding.rvUpcomingEvents.adapter = adapter
+    }
+
+    /// Show progress bar
+    private fun showLoading(isLoading: Boolean) {
+
+        if (isLoading) {
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.INVISIBLE
+        }
     }
 
 

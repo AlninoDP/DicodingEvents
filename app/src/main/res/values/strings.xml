@@ -1,10 +1,16 @@
 <resources>
     <string name="app_name">Dicoding Events</string>
     <string name="title_home">Home</string>
+
     <string name="title_upcoming_event">Upcoming</string>
     <string name="title_finished_event">Finished</string>
+
     <string name="header_upcoming_event">Upcoming Event</string>
     <string name="sub_header_upcoming_event">Come Join Us !</string>
+
+
+    <string name="header_finished_event">List of Past Events</string>
+    <string name="sub_header_finished_event">This Events is Finished, Check our Upcoming Events</string>
 
     <string name="event_location">Location</string>
     <string name="event_start">Event Start</string>

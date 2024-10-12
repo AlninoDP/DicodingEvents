@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/img_event"
             android:layout_width="0dp"
-            android:layout_height="180dp"
+            android:layout_height="200dp"
             android:contentDescription="@string/image_description"
             android:scaleType="centerCrop"
             android:src="@drawable/bg_placeholder"
@@ -47,13 +47,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/img_event" />
 
-        <View
+        <TextView
             android:id="@+id/divider1"
-            android:layout_width="1dp"
+            android:layout_width="5dp"
             android:layout_height="20dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
+            android:text="-"
             android:background="?attr/listDividerAlertDialog"
             app:layout_constraintEnd_toStartOf="@+id/tv_event_end"
             app:layout_constraintStart_toEndOf="@+id/tv_event_start"

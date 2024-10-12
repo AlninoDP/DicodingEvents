@@ -5,11 +5,13 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-class ApiService {
-//    @GET("events")
-//    fun getEvents(
-//        @Query("active") active: Int?,
-//        @Query("q") q: String? ,
-//        @Query("limit") limit: Int?
-//    ): Call<ResponseEvents>
+interface ApiService {
+    @GET("events")
+    fun getEvents(
+        @Query("active") active: Int? = -1,
+        @Query("q") q: String? = null,
+        @Query("limit") limit: Int? = 40,
+    ): Call<ResponseEvents>
+
+
 }

@@ -3,4 +3,14 @@
     <string name="title_home">Home</string>
     <string name="title_upcoming_event">Upcoming</string>
     <string name="title_finished_event">Finished</string>
+    <string name="header_upcoming_event">Upcoming Event</string>
+    <string name="sub_header_upcoming_event">Come Join Us !</string>
+
+    <string name="event_location">Location</string>
+    <string name="event_start">Event Start</string>
+    <string name="event_end">Event End</string>
+    <string name="event_title">Event Title</string>
+    <string name="event_owner">Event Owner</string>
+
+    <string name="image_description">Event Image</string>
 </resources>

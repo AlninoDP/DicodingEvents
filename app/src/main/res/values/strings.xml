@@ -17,6 +17,11 @@
     <string name="event_end">Event End</string>
     <string name="event_title">Event Title</string>
     <string name="event_owner">Event Owner</string>
+    <string name="event_registrant">Event Registrant</string>
+    <string name="event_quota">Event Quota</string>
+    <string name="event_description">Event Description</string>
+    <string name="register_event">Register</string>
 
     <string name="image_description">Event Image</string>
+    <string name="divider_text">-</string>
 </resources>

@@ -1,8 +1,9 @@
 package com.example.dicodingevents.data.retrofit
 
 import com.example.dicodingevents.data.response.ResponseEvents
-import retrofit2.Call
+import com.example.dicodingevents.data.response.ResponseEventsDetail
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -12,5 +13,11 @@ interface ApiService {
         @Query("q") q: String? = null,
         @Query("limit") limit: Int? = 40,
     ): ResponseEvents
+
+
+    @GET("events/{id}")
+    suspend fun getEventDetail(
+        @Path("id") id:String
+    ) : ResponseEventsDetail
 
 }

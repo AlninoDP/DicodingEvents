@@ -17,7 +17,7 @@ class UpcomingEventsFragment : Fragment() {
     private val binding get() = _binding!!
     private val upcomingEventsViewModel by viewModels<UpcomingEventsViewModel>()
 
-    override fun onCreateView(
+        override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?

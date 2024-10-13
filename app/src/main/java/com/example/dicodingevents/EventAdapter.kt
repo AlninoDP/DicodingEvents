@@ -1,5 +1,6 @@
 package com.example.dicodingevents
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dicodingevents.data.response.ListEventsItem
 import com.example.dicodingevents.databinding.EventCardBinding
+import com.example.dicodingevents.ui.eventdetail.EventDetailActivity
 
 class EventAdapter(private val events: List<ListEventsItem>) :
     RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
@@ -14,7 +16,7 @@ class EventAdapter(private val events: List<ListEventsItem>) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(event: ListEventsItem) {
             Glide.with(itemView.context)
-                .load(event.imageLogo)
+                .load(event.mediaCover)
                 .into(binding.imgEvent)
 
             binding.tvLocation.text = event.cityName
@@ -22,6 +24,13 @@ class EventAdapter(private val events: List<ListEventsItem>) :
             binding.tvEventEnd.text = event.endTime
             binding.tvEventTitle.text = event.name
             binding.tvEventOwner.text = event.ownerName
+
+            itemView.setOnClickListener {
+                val intent = Intent(itemView.context, EventDetailActivity::class.java)
+                intent.putExtra("EVENT_ID", event.id.toString())
+                intent.putExtra("EVENT_LINK", event.link)
+                itemView.context.startActivity(intent)
+            }
         }
     }
 
@@ -37,4 +46,5 @@ class EventAdapter(private val events: List<ListEventsItem>) :
         val event = events[position]
         holder.bind(event)
     }
+
 }

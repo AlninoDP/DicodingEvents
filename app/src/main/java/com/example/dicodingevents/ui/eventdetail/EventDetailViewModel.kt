@@ -11,13 +11,13 @@ import kotlinx.coroutines.launch
 
 class EventDetailViewModel : ViewModel() {
 
-
-
     private val _eventsItem = MutableLiveData<ListEventsItem>()
     val eventsItem: LiveData<ListEventsItem> = _eventsItem
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private var isDataLoaded = false // New variable to track data loading state
 
 
     companion object {
@@ -25,9 +25,12 @@ class EventDetailViewModel : ViewModel() {
     }
 
     fun loadEventDetail(eventId: String) {
-        viewModelScope.launch {
-            getEventDetail(eventId)
+        if (!isDataLoaded){
+            viewModelScope.launch {
+                getEventDetail(eventId)
+            }
         }
+
     }
 
     private suspend fun getEventDetail(eventId: String) {
@@ -37,6 +40,7 @@ class EventDetailViewModel : ViewModel() {
             val response = ApiConfig.getApiService().getEventDetail(eventId)
             val event = response.event
             _eventsItem.value = event
+            isDataLoaded = true
             _isLoading.value = false
         } catch (e: Exception) {
             // TODO: ADD BETTER HANDLING

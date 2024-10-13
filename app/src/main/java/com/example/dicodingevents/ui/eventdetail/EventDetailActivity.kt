@@ -79,8 +79,10 @@ class EventDetailActivity : AppCompatActivity() {
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
             binding.progressBar3.visibility = View.VISIBLE
+            binding.detailContent.visibility = View.GONE // Hide the main content
         } else {
-            binding.progressBar3.visibility = View.INVISIBLE
+            binding.progressBar3.visibility = View.GONE
+            binding.detailContent.visibility = View.VISIBLE // Hide the main content
         }
     }
 }

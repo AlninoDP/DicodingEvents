@@ -48,7 +48,7 @@ class EventDetailActivity : AppCompatActivity() {
             setEventData(it)
         }
 
-        eventDetailViewModel.snackBarText.observe(this) { it ->
+        eventDetailViewModel.snackBarText.observe(this) {
             it.getContentIfNotHandled()?.let { snackBarText ->
                 Snackbar.make(
                     window.decorView.rootView,

@@ -24,4 +24,6 @@
 
     <string name="image_description">Event Image</string>
     <string name="divider_text">-</string>
+
+    <string name="searchbar_hint">Cari Event</string>
 </resources>

@@ -1,12 +1,14 @@
 package com.example.dicodingevents.ui.eventdetail
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dicodingevents.data.response.ListEventsItem
 import com.example.dicodingevents.data.retrofit.ApiConfig
+import com.example.dicodingevents.utils.Event
 import kotlinx.coroutines.launch
 
 class EventDetailViewModel : ViewModel() {
@@ -17,7 +19,10 @@ class EventDetailViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private var isDataLoaded = false // New variable to track data loading state
+    private val _snackBarText = MutableLiveData<Event<String>>()
+    val snackBarText: LiveData<Event<String>> = _snackBarText
+
+    private var isDataLoaded = false
 
 
     companion object {
@@ -25,7 +30,7 @@ class EventDetailViewModel : ViewModel() {
     }
 
     fun loadEventDetail(eventId: String) {
-        if (!isDataLoaded){
+        if (!isDataLoaded) {
             viewModelScope.launch {
                 getEventDetail(eventId)
             }
@@ -43,8 +48,8 @@ class EventDetailViewModel : ViewModel() {
             isDataLoaded = true
             _isLoading.value = false
         } catch (e: Exception) {
-            // TODO: ADD BETTER HANDLING
             _isLoading.value = false
+            _snackBarText.value = Event("Failed to Load Data, Error: ${e.message}")
             Log.d(TAG, "${e.message}")
         }
     }

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.dicodingevents.data.response.ListEventsItem
 import com.example.dicodingevents.data.response.ResponseEvents
 import com.example.dicodingevents.data.retrofit.ApiConfig
+import com.example.dicodingevents.utils.Event
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,6 +22,9 @@ class UpcomingEventsViewModel : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _snackBarText = MutableLiveData<Event<String>>()
+    val snackBarText: LiveData<Event<String>> = _snackBarText
 
     companion object {
         private const val TAG = "upcomingEventsViewModel"
@@ -44,6 +48,7 @@ class UpcomingEventsViewModel : ViewModel() {
 
         } catch (e: Exception) {
             _isLoading.value = false
+            _snackBarText.value = Event("Failed to Load Data, Error: ${e.message}")
             Log.d(TAG, "${e.message}")
         }
 

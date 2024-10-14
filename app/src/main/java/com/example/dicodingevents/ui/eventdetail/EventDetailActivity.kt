@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.example.dicodingevents.R
 import com.example.dicodingevents.data.response.ListEventsItem
 import com.example.dicodingevents.databinding.ActivityEventDetailBinding
+import com.google.android.material.snackbar.Snackbar
 
 class EventDetailActivity : AppCompatActivity() {
 
@@ -37,22 +38,29 @@ class EventDetailActivity : AppCompatActivity() {
         val eventId = intent.getStringExtra("EVENT_ID")
         val eventLink = intent.getStringExtra("EVENT_LINK")
 
-
-
-
-
-        eventDetailViewModel.isLoading.observe(this){
+        eventDetailViewModel.isLoading.observe(this) {
             showLoading(it)
         }
 
         eventDetailViewModel.loadEventDetail(eventId!!)
-        eventDetailViewModel.eventsItem.observe(this){
+
+        eventDetailViewModel.eventsItem.observe(this) {
             setEventData(it)
+        }
+
+        eventDetailViewModel.snackBarText.observe(this) { it ->
+            it.getContentIfNotHandled()?.let { snackBarText ->
+                Snackbar.make(
+                    window.decorView.rootView,
+                    snackBarText,
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
         }
 
 
 
-        binding.btnRegister.setOnClickListener{
+        binding.btnRegister.setOnClickListener {
             val openUrlIntent = Intent(Intent.ACTION_VIEW, Uri.parse(eventLink))
             startActivity(openUrlIntent)
         }
@@ -60,7 +68,7 @@ class EventDetailActivity : AppCompatActivity() {
 
     }
 
-    private fun setEventData (eventData: ListEventsItem){
+    private fun setEventData(eventData: ListEventsItem) {
         Glide.with(this)
             .load(eventData.mediaCover)
             .into(binding.imgPosterEvent)

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dicodingevents.EventAdapter
 import com.example.dicodingevents.data.response.ListEventsItem
 import com.example.dicodingevents.databinding.FragmentUpcomingEventsBinding
+import com.google.android.material.snackbar.Snackbar
 
 class UpcomingEventsFragment : Fragment() {
 
@@ -17,7 +18,7 @@ class UpcomingEventsFragment : Fragment() {
     private val binding get() = _binding!!
     private val upcomingEventsViewModel by viewModels<UpcomingEventsViewModel>()
 
-        override fun onCreateView(
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,12 +32,23 @@ class UpcomingEventsFragment : Fragment() {
 
 
         // Observer
-        upcomingEventsViewModel.listEventsItem.observe(viewLifecycleOwner){
+        upcomingEventsViewModel.listEventsItem.observe(viewLifecycleOwner) {
             setEventsData(it)
         }
         upcomingEventsViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
+        upcomingEventsViewModel.snackBarText.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let { snackBarText ->
+                Snackbar.make(
+                    binding.rvUpcomingEvents,
+                    snackBarText,
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+
 
         return binding.root
 
@@ -48,7 +60,7 @@ class UpcomingEventsFragment : Fragment() {
     }
 
 
-    private fun setEventsData (events: List<ListEventsItem>){
+    private fun setEventsData(events: List<ListEventsItem>) {
         val adapter = EventAdapter(events)
         binding.rvUpcomingEvents.adapter = adapter
     }

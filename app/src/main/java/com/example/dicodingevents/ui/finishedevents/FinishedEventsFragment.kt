@@ -1,6 +1,8 @@
 package com.example.dicodingevents.ui.finishedevents
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,10 +32,12 @@ class FinishedEventsFragment : Fragment() {
 
         //layout manager
         val layoutManager = LinearLayoutManager(requireActivity())
+        val searchResultLayoutManager= LinearLayoutManager(requireActivity())
         binding.rvFinishedEvents.layoutManager = layoutManager
+        binding.rvSearchResults.layoutManager = searchResultLayoutManager
 
         // Observer
-        finishedEventsViewModel.listEventsItem.observe(viewLifecycleOwner){
+        finishedEventsViewModel.listEventsItem.observe(viewLifecycleOwner) {
             setEventsData(it)
         }
         finishedEventsViewModel.isLoading.observe(viewLifecycleOwner) {
@@ -49,9 +53,8 @@ class FinishedEventsFragment : Fragment() {
             }
         }
 
-       with(binding){
-           searchView.setupWithSearchBar(finishedSearchBar)
-       }
+        searchEvent()
+
 
         return binding.root
     }
@@ -62,9 +65,10 @@ class FinishedEventsFragment : Fragment() {
     }
 
 
-    private fun setEventsData (events: List<ListEventsItem>){
+    private fun setEventsData(events: List<ListEventsItem>) {
         val adapter = EventAdapter(events)
         binding.rvFinishedEvents.adapter = adapter
+        binding.rvSearchResults.adapter = adapter
     }
 
     /// Show progress bar
@@ -74,6 +78,34 @@ class FinishedEventsFragment : Fragment() {
             binding.progressBar2.visibility = View.VISIBLE
         } else {
             binding.progressBar2.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun searchEvent() {
+        with(binding) {
+            searchView.setupWithSearchBar(binding.finishedSearchBar)
+
+            searchView.editText.addTextChangedListener(object :TextWatcher{
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    finishedSearchBar.setText(searchView.text)
+                    finishedEventsViewModel.searchFinishedEvents(s.toString())
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+
+                }
+
+            })
+
+            searchView.editText.setOnEditorActionListener { _, _, _ ->
+                finishedSearchBar.setText(searchView.text)
+                finishedEventsViewModel.searchFinishedEvents(searchView.text.toString())
+                false
+            }
         }
     }
 }

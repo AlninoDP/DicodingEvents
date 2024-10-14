@@ -1,9 +1,12 @@
 package com.example.dicodingevents.ui.upcomingevents
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,11 +27,14 @@ class UpcomingEventsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentUpcomingEventsBinding.inflate(inflater, container, false)
+        (activity as AppCompatActivity).supportActionBar?.hide()
 
 
         //layout manager
         val layoutManager = LinearLayoutManager(requireActivity())
+        val searchResultLayoutManager = LinearLayoutManager(requireActivity())
         binding.rvUpcomingEvents.layoutManager = layoutManager
+        binding.rvSearchResultsUpcoming.layoutManager = searchResultLayoutManager
 
 
         // Observer
@@ -48,8 +54,7 @@ class UpcomingEventsFragment : Fragment() {
             }
         }
 
-
-
+        searchEvent()
         return binding.root
 
     }
@@ -63,6 +68,7 @@ class UpcomingEventsFragment : Fragment() {
     private fun setEventsData(events: List<ListEventsItem>) {
         val adapter = EventAdapter(events)
         binding.rvUpcomingEvents.adapter = adapter
+        binding.rvSearchResultsUpcoming.adapter = adapter
     }
 
     /// Show progress bar
@@ -75,5 +81,32 @@ class UpcomingEventsFragment : Fragment() {
         }
     }
 
+    private fun searchEvent() {
+        with(binding) {
+            searchViewUpcoming.setupWithSearchBar(upcomingSearchBar)
+
+            searchViewUpcoming.editText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    upcomingSearchBar.setText(searchViewUpcoming.text)
+                    upcomingEventsViewModel.searchUpcomingEvents(s.toString())
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+
+                }
+
+            })
+
+            searchViewUpcoming.editText.setOnEditorActionListener { _, _, _ ->
+                upcomingSearchBar.setText(searchViewUpcoming.text)
+                upcomingEventsViewModel.searchUpcomingEvents(searchViewUpcoming.text.toString())
+                false
+            }
+        }
+    }
 
 }

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.dicodingevents.data.response.ListEventsItem
 import com.example.dicodingevents.data.response.ResponseEvents
 import com.example.dicodingevents.data.retrofit.ApiConfig
+import com.example.dicodingevents.ui.finishedevents.FinishedEventsViewModel
 import com.example.dicodingevents.utils.Event
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -50,6 +51,25 @@ class UpcomingEventsViewModel : ViewModel() {
             _isLoading.value = false
             _snackBarText.value = Event("Failed to Load Data, Error: ${e.message}")
             Log.d(TAG, "${e.message}")
+        }
+
+    }
+
+    fun searchUpcomingEvents(query: String) {
+        _isLoading.value = true
+
+        viewModelScope.launch {
+            try {
+                val response = ApiConfig.getApiService().getEvents(1, query)
+                val listEvents = response.listEvents
+                _listEventsItem.value = listEvents
+                _isLoading.value = false
+
+            } catch (e: Exception) {
+                _isLoading.value = false
+                _snackBarText.value = Event("Failed to Load Data, Error: ${e.message}")
+                Log.d(TAG, "${e.message}")
+            }
         }
 
     }

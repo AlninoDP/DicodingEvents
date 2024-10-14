@@ -27,12 +27,12 @@ class FinishedEventsViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            getUpcomingEvents()
+            getFinishedEvents()
         }
     }
 
 
-    private suspend fun getUpcomingEvents() {
+    private suspend fun getFinishedEvents() {
         _isLoading.value = true
 
         try {
@@ -45,6 +45,25 @@ class FinishedEventsViewModel : ViewModel() {
             _isLoading.value = false
             _snackBarText.value = Event("Failed to Load Data, Error: ${e.message}")
             Log.d(TAG, "${e.message}")
+        }
+
+    }
+
+      fun searchFinishedEvents(query: String) {
+        _isLoading.value = true
+
+        viewModelScope.launch {
+            try {
+                val response = ApiConfig.getApiService().getEvents(0, query)
+                val listEvents = response.listEvents
+                _listEventsItem.value = listEvents
+                _isLoading.value = false
+
+            } catch (e: Exception) {
+                _isLoading.value = false
+                _snackBarText.value = Event("Failed to Load Data, Error: ${e.message}")
+                Log.d(TAG, "${e.message}")
+            }
         }
 
     }

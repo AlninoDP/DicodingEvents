@@ -27,4 +27,8 @@
         android:name="com.example.dicodingevents.ui.eventdetail.EventDetailActivity"
         android:label="activity_event_detail"
         tools:layout="@layout/activity_event_detail" />
+    <activity
+        android:id="@+id/mainActivity2"
+        android:name="com.example.dicodingevents.MainActivity"
+        android:label="MainActivity" />
 </navigation>

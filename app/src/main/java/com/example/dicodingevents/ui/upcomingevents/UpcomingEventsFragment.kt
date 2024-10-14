@@ -76,8 +76,10 @@ class UpcomingEventsFragment : Fragment() {
 
         if (isLoading) {
             binding.progressBar.visibility = View.VISIBLE
+            binding.pbSearchResultUpcoming.visibility = View.VISIBLE
         } else {
             binding.progressBar.visibility = View.INVISIBLE
+            binding.pbSearchResultUpcoming.visibility = View.INVISIBLE
         }
     }
 

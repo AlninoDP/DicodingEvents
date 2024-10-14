@@ -4,17 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.dicodingevents.data.response.ListEventsItem
-import com.example.dicodingevents.data.response.ResponseEvents
 import com.example.dicodingevents.data.retrofit.ApiConfig
-import com.example.dicodingevents.ui.finishedevents.FinishedEventsViewModel
 import com.example.dicodingevents.utils.Event
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class UpcomingEventsViewModel : ViewModel() {
 

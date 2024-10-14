@@ -12,14 +12,24 @@
         android:layout_height="wrap_content">
 
         <ProgressBar
-            android:id="@+id/progressBarHome"
+            android:id="@+id/progressBarHome1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/tv_home_sub_header2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_home_sub_header" />
+
+        <ProgressBar
+            android:id="@+id/progressBarHome2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_home_sub_header2" />
 
         <TextView
             android:id="@+id/tv_home_header"

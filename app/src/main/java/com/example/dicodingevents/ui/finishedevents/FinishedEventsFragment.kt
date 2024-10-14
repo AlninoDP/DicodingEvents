@@ -76,8 +76,10 @@ class FinishedEventsFragment : Fragment() {
 
         if (isLoading) {
             binding.progressBar2.visibility = View.VISIBLE
+            binding.pbSearchResultFinished.visibility = View.VISIBLE
         } else {
             binding.progressBar2.visibility = View.INVISIBLE
+            binding.pbSearchResultFinished.visibility = View.INVISIBLE
         }
     }
 

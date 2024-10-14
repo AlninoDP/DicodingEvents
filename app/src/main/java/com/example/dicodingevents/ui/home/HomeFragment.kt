@@ -79,9 +79,11 @@ class HomeFragment : Fragment() {
     private fun showLoading(isLoading: Boolean) {
 
         if (isLoading) {
-            binding.progressBarHome.visibility = View.VISIBLE
+            binding.progressBarHome1.visibility = View.VISIBLE
+            binding.progressBarHome2.visibility = View.VISIBLE
         } else {
-            binding.progressBarHome.visibility = View.INVISIBLE
+            binding.progressBarHome1.visibility = View.INVISIBLE
+            binding.progressBarHome2.visibility = View.INVISIBLE
         }
     }
 }

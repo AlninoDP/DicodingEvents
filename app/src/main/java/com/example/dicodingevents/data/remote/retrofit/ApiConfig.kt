@@ -1,4 +1,4 @@
-package com.example.dicodingevents.data.retrofit
+package com.example.dicodingevents.data.remote.retrofit
 
 import com.example.dicodingevents.BuildConfig
 import okhttp3.OkHttpClient
@@ -22,7 +22,7 @@ class ApiConfig {
                 .build()
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://event-api.dicoding.dev/")
+                .baseUrl(BuildConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()

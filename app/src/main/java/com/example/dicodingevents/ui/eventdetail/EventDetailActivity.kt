@@ -12,7 +12,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.example.dicodingevents.R
-import com.example.dicodingevents.data.response.ListEventsItem
+import com.example.dicodingevents.data.remote.response.ListEventsItem
 import com.example.dicodingevents.databinding.ActivityEventDetailBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -73,10 +73,15 @@ class EventDetailActivity : AppCompatActivity() {
             .load(eventData.mediaCover)
             .into(binding.imgPosterEvent)
 
+        val totalQuota = eventData.quota?: 0
+        val totalRegistrant = eventData.registrants?: 0
+        val remainingQuota = totalQuota - totalRegistrant
+
         binding.tvEventDetailTitle.text = eventData.name
         binding.tvEventDetailStart.text = eventData.beginTime
-        binding.tvQuota.text = eventData.quota.toString()
-        binding.tvRegistrant.text = eventData.registrants.toString()
+        binding.tvQuota.text = totalQuota.toString()
+        binding.tvRegistrant.text = totalRegistrant.toString()
+        binding.tvQuotaRemain.text = "Quota Tersisa: $remainingQuota"
         binding.tvOwnerName.text = eventData.ownerName
         binding.tvEventDescription.text = HtmlCompat.fromHtml(
             eventData.description.toString(),

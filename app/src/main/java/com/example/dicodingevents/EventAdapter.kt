@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.dicodingevents.data.response.ListEventsItem
+import com.example.dicodingevents.data.remote.response.ListEventsItem
 import com.example.dicodingevents.databinding.EventCardBinding
 import com.example.dicodingevents.ui.eventdetail.EventDetailActivity
 

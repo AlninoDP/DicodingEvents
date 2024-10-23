@@ -11,13 +11,13 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:padding="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/detail_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/img_poster_event"
@@ -64,17 +64,25 @@
                 android:id="@+id/tv_registrant"
                 style="@style/event_information"
                 android:text="@string/event_registrant"
-                app:drawableStartCompat="@drawable/ic_registrant"
+                app:drawableStartCompat="@drawable/ic_verified_registrant"
                 app:layout_constraintStart_toEndOf="@+id/tv_quota"
                 app:layout_constraintTop_toBottomOf="@+id/tv_event_detail_title" />
+
+            <TextView
+                android:id="@+id/tv_quota_remain"
+                style="@style/event_information"
+                android:text="@string/event_quota_remain"
+                app:drawableStartCompat="@drawable/ic_registrant"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_registrant" />
 
             <TextView
                 android:id="@+id/tv_owner_name"
                 style="@style/event_information"
                 android:text="@string/event_owner"
-                app:layout_constraintTop_toBottomOf="@id/tv_quota"
+                app:drawableStartCompat="@drawable/ic_business"
                 app:layout_constraintStart_toStartOf="parent"
-                app:drawableStartCompat="@drawable/ic_business" />
+                app:layout_constraintTop_toBottomOf="@id/tv_quota_remain" />
 
 
             <TextView
@@ -108,11 +116,11 @@
         android:id="@+id/progressBar3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_gravity="center"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"  />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </FrameLayout>

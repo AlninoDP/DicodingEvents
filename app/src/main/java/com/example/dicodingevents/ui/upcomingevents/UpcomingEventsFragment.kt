@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dicodingevents.EventAdapter
-import com.example.dicodingevents.data.response.ListEventsItem
+import com.example.dicodingevents.data.remote.response.ListEventsItem
 import com.example.dicodingevents.databinding.FragmentUpcomingEventsBinding
 import com.google.android.material.snackbar.Snackbar
 

@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dicodingevents.CarouselAdapter
 import com.example.dicodingevents.EventListAdapter
-import com.example.dicodingevents.data.response.ListEventsItem
+import com.example.dicodingevents.data.remote.response.ListEventsItem
 import com.example.dicodingevents.databinding.FragmentHomeBinding
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper

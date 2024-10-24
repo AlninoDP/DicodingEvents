@@ -5,12 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dicodingevents.data.EventsRepository
 import com.example.dicodingevents.data.remote.response.ListEventsItem
 import com.example.dicodingevents.data.remote.retrofit.ApiConfig
 import com.example.dicodingevents.utils.Event
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val eventsRepository: EventsRepository) : ViewModel() {
 
     private val _listFinishedEventsItem = MutableLiveData<List<ListEventsItem>>()
     val listFinishedEventsItem: LiveData<List<ListEventsItem>> = _listFinishedEventsItem
@@ -69,4 +70,6 @@ class HomeViewModel : ViewModel() {
         }
 
     }
+
+    fun getAllEvents() = eventsRepository.getAllEvents()
 }

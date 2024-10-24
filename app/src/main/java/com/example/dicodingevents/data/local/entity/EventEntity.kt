@@ -14,7 +14,7 @@ class EventEntity(
     var id: Int = 0,
 
     @ColumnInfo(name = "eventId")
-    var eventId: String? = null,
+    var eventId: Int? = null,
 
     @ColumnInfo(name = "name")
     var name: String? = null,

@@ -56,10 +56,10 @@ data class ListEventsItem(
     val cityName: String? = null,
 
     @field:SerializedName("quota")
-    val quota: Int? = null,
+    val quota: Int = 0,
 
     @field:SerializedName("registrants")
-    val registrants: Int? = null,
+    val registrants: Int = 0,
 
     @field:SerializedName("beginTime")
     val beginTime: String? = null,

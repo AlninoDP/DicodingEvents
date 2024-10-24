@@ -1,4 +1,4 @@
-package com.example.dicodingevents.data.local.room
+ package com.example.dicodingevents.data.local.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -11,6 +11,9 @@ import com.example.dicodingevents.data.local.entity.EventEntity
 @Dao
 interface EventsDao {
 
+    @Query ("SELECT * from events ORDER BY id ASC")
+    fun getAllEvents(): LiveData<List<EventEntity>>
+
     @Query("SELECT * from events where isFinished = 1")
     fun getFinishedEvents(): LiveData<List<EventEntity>>
 
@@ -22,5 +25,8 @@ interface EventsDao {
 
     @Update
     suspend fun updateEvents(events: EventEntity)
+
+    @Query ("DELETE FROM events")
+    suspend fun deleteAll()
 
 }

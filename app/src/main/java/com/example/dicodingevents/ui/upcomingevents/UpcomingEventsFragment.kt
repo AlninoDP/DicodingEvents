@@ -6,20 +6,23 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dicodingevents.EventAdapter
+import com.example.dicodingevents.data.Result
 import com.example.dicodingevents.data.remote.response.ListEventsItem
 import com.example.dicodingevents.databinding.FragmentUpcomingEventsBinding
+import com.example.dicodingevents.ui.ViewModelFactory
+import com.example.dicodingevents.ui.home.HomeViewModel
 import com.google.android.material.snackbar.Snackbar
 
 class UpcomingEventsFragment : Fragment() {
 
     private var _binding: FragmentUpcomingEventsBinding? = null
     private val binding get() = _binding!!
-    private val upcomingEventsViewModel by viewModels<UpcomingEventsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,34 +31,53 @@ class UpcomingEventsFragment : Fragment() {
     ): View {
         _binding = FragmentUpcomingEventsBinding.inflate(inflater, container, false)
         (activity as AppCompatActivity).supportActionBar?.hide()
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        //layout manager
-        val layoutManager = LinearLayoutManager(requireActivity())
-        val searchResultLayoutManager = LinearLayoutManager(requireActivity())
-        binding.rvUpcomingEvents.layoutManager = layoutManager
-        binding.rvSearchResultsUpcoming.layoutManager = searchResultLayoutManager
-
-
-        // Observer
-        upcomingEventsViewModel.listEventsItem.observe(viewLifecycleOwner) {
-            setEventsData(it)
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(requireActivity())
+        val upcomingEventViewModel by viewModels<UpcomingEventsViewModel> {
+            factory
         }
-        upcomingEventsViewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
-        }
-        upcomingEventsViewModel.snackBarText.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let { snackBarText ->
-                Snackbar.make(
-                    binding.rvUpcomingEvents,
-                    snackBarText,
-                    Snackbar.LENGTH_SHORT
-                ).show()
+        val eventAdapter = EventAdapter()
+
+        upcomingEventViewModel.getAllEvents().observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+
+                is Result.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    upcomingEventViewModel.getUpcomingEvents()
+                        .observe(viewLifecycleOwner) {
+                            eventAdapter.submitList(it)
+                        }
+                    searchEvent(eventAdapter, upcomingEventViewModel)
+                }
+
+                is Result.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(
+                        context,
+                        "Terjadi kesalahan" + result.error,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
 
-        searchEvent()
-        return binding.root
+        binding.rvSearchResultsUpcoming.apply {
+            binding.rvSearchResultsUpcoming.layoutManager = LinearLayoutManager(requireActivity())
+            binding.rvSearchResultsUpcoming.adapter = eventAdapter
+        }
+
+        binding.rvUpcomingEvents.apply {
+            binding.rvUpcomingEvents.layoutManager = LinearLayoutManager(requireActivity())
+            binding.rvUpcomingEvents.adapter = eventAdapter
+        }
 
     }
 
@@ -64,26 +86,7 @@ class UpcomingEventsFragment : Fragment() {
         _binding = null
     }
 
-
-    private fun setEventsData(events: List<ListEventsItem>) {
-        val adapter = EventAdapter(events)
-        binding.rvUpcomingEvents.adapter = adapter
-        binding.rvSearchResultsUpcoming.adapter = adapter
-    }
-
-    /// Show progress bar
-    private fun showLoading(isLoading: Boolean) {
-
-        if (isLoading) {
-            binding.progressBar.visibility = View.VISIBLE
-            binding.pbSearchResultUpcoming.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.INVISIBLE
-            binding.pbSearchResultUpcoming.visibility = View.INVISIBLE
-        }
-    }
-
-    private fun searchEvent() {
+    private fun searchEvent(eventAdapter: EventAdapter, viewModel: UpcomingEventsViewModel) {
         with(binding) {
             searchViewUpcoming.setupWithSearchBar(upcomingSearchBar)
 
@@ -92,9 +95,12 @@ class UpcomingEventsFragment : Fragment() {
 
                 }
 
-                override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                override fun onTextChanged(char: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     upcomingSearchBar.setText(searchViewUpcoming.text)
-                    upcomingEventsViewModel.searchUpcomingEvents(s.toString())
+                    viewModel.searchEvent("%${char.toString()}%", 0)
+                        .observe(viewLifecycleOwner) {
+                            eventAdapter.submitList(it)
+                        }
                 }
 
                 override fun afterTextChanged(p0: Editable?) {
@@ -105,7 +111,7 @@ class UpcomingEventsFragment : Fragment() {
 
             searchViewUpcoming.editText.setOnEditorActionListener { _, _, _ ->
                 upcomingSearchBar.setText(searchViewUpcoming.text)
-                upcomingEventsViewModel.searchUpcomingEvents(searchViewUpcoming.text.toString())
+                viewModel.searchEvent(searchViewUpcoming.text.toString())
                 false
             }
         }

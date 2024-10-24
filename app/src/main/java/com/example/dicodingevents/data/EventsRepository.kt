@@ -14,7 +14,7 @@ import java.util.Locale
 
 class EventsRepository private constructor(
     private val apiService: ApiService,
-    private val eventsDao:EventsDao,
+    private val eventsDao: EventsDao,
 ) {
     companion object {
         @Volatile
@@ -23,7 +23,7 @@ class EventsRepository private constructor(
         fun getInstance(
             apiService: ApiService,
             eventsDao: EventsDao,
-        ) : EventsRepository = instance ?: synchronized(this) {
+        ): EventsRepository = instance ?: synchronized(this) {
             instance ?: EventsRepository(apiService, eventsDao)
         }.also {
             instance = it
@@ -35,8 +35,7 @@ class EventsRepository private constructor(
         try {
             val response = apiService.getEvents()
             val events = response.listEvents
-            val eventList = events.map {
-                event ->
+            val eventList = events.map { event ->
                 val isFinished = isEventFinished(event.beginTime)
                 EventEntity(
                     eventId = event.id,
@@ -57,7 +56,7 @@ class EventsRepository private constructor(
             }
             eventsDao.deleteAll()
             eventsDao.insertEvents(eventList)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Log.d("EventsRepository", "getAllEvents: ${e.message.toString()}")
             emit(Result.Error(e.message.toString()))
         }
@@ -68,7 +67,23 @@ class EventsRepository private constructor(
         emitSource(localData)
     }
 
-    private fun isEventFinished(beginTime: String?) : Boolean {
+    fun getEventDetail(eventId: Int):  LiveData<EventEntity> {
+        return eventsDao.getEventDetails(eventId)
+    }
+
+    fun getFinishedEvents(limit: Int? = 40): LiveData<List<EventEntity>> {
+        return eventsDao.getFinishedEvents(limit = limit)
+    }
+
+    fun getUpcomingEvents(): LiveData<List<EventEntity>> {
+        return eventsDao.getUpcomingEvents()
+    }
+
+    fun searchEvents(name:String?, isFinished: Int? = 0): LiveData<List<EventEntity>> {
+        return eventsDao.searchEvent(name, isFinished)
+    }
+
+    private fun isEventFinished(beginTime: String?): Boolean {
 
         if (beginTime.isNullOrEmpty()) {
             return false
@@ -79,11 +94,10 @@ class EventsRepository private constructor(
             val eventTime = dateTimeFormat.parse(beginTime)
             val currentDateTime: Date = Date()
 
-            currentDateTime.before(eventTime)
+            currentDateTime.after(eventTime)
         } catch (e: Exception) {
             false
         }
-
 
 
     }

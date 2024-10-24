@@ -5,97 +5,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dicodingevents.data.EventsRepository
 import com.example.dicodingevents.data.remote.response.ListEventsItem
 import com.example.dicodingevents.data.remote.retrofit.ApiConfig
 import com.example.dicodingevents.utils.Event
 import kotlinx.coroutines.launch
 
-class UpcomingEventsViewModel : ViewModel() {
+class UpcomingEventsViewModel(private val eventsRepository: EventsRepository) : ViewModel() {
 
-    private val _listEventsItem = MutableLiveData<List<ListEventsItem>>()
-    val listEventsItem: LiveData<List<ListEventsItem>> = _listEventsItem
+    fun getAllEvents() = eventsRepository.getAllEvents()
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
+    fun getUpcomingEvents() = eventsRepository.getUpcomingEvents()
 
-    private val _snackBarText = MutableLiveData<Event<String>>()
-    val snackBarText: LiveData<Event<String>> = _snackBarText
+    fun searchEvent(name: String?, isFinished: Int? = 0) =
+        eventsRepository.searchEvents(name, isFinished)
 
-    companion object {
-        private const val TAG = "upcomingEventsViewModel"
-    }
-
-    init {
-        viewModelScope.launch {
-            getUpcomingEvents()
-        }
-    }
-
-
-    private suspend fun getUpcomingEvents() {
-        _isLoading.value = true
-
-        try {
-            val response = ApiConfig.getApiService().getEvents(1)
-            val listEvents = response.listEvents
-            _listEventsItem.value = listEvents
-            _isLoading.value = false
-
-        } catch (e: Exception) {
-            _isLoading.value = false
-            _snackBarText.value = Event("Failed to Load Data, Error: ${e.message}")
-            Log.d(TAG, "${e.message}")
-        }
-
-    }
-
-    fun searchUpcomingEvents(query: String) {
-        _isLoading.value = true
-
-        viewModelScope.launch {
-            try {
-                val response = ApiConfig.getApiService().getEvents(1, query)
-                val listEvents = response.listEvents
-                _listEventsItem.value = listEvents
-                _isLoading.value = false
-
-            } catch (e: Exception) {
-                _isLoading.value = false
-                _snackBarText.value = Event("Failed to Load Data, Error: ${e.message}")
-                Log.d(TAG, "${e.message}")
-            }
-        }
-
-    }
-
-//    private fun getUpcomingEvents(): {
-//        _isLoading.value = true
-//
-//        val client = ApiConfig.getApiService().getEvents(1)
-//        client.enqueue(object : Callback<ResponseEvents> {
-//
-//            override fun onResponse(
-//                call: Call<ResponseEvents>,
-//                response: Response<ResponseEvents>
-//            ) {
-//                _isLoading.value = false
-//                if (response.isSuccessful) {
-//                    val responseBody = response.body()
-//
-//                    if (responseBody != null){
-//                        _listEventsItem.value = responseBody.listEvents
-//                    }else{
-//                        // TODO: Implement Error Handling
-//                        Log.e(TAG, "onFailure: ${response.message()}")
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ResponseEvents>, t: Throwable) {
-//                _isLoading.value = false
-//                Log.e(TAG, "onFailure: ${t.message}")
-//            }
-//
-//        })
-//    }
 }

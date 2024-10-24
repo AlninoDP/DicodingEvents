@@ -1,4 +1,4 @@
- package com.example.dicodingevents.data.local.room
+package com.example.dicodingevents.data.local.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -11,14 +11,20 @@ import com.example.dicodingevents.data.local.entity.EventEntity
 @Dao
 interface EventsDao {
 
-    @Query ("SELECT * from events ORDER BY id ASC")
+    @Query("SELECT * from events ORDER BY id ASC")
     fun getAllEvents(): LiveData<List<EventEntity>>
 
-    @Query("SELECT * from events where isFinished = 1")
-    fun getFinishedEvents(): LiveData<List<EventEntity>>
+    @Query("SELECT * from events where isFinished = 1 LIMIT :limit")
+    fun getFinishedEvents(limit: Int? = 40): LiveData<List<EventEntity>>
 
-    @Query("SELECT * from events where isFinished = 0")
+    @Query("SELECT * from events where isFinished = 0 ")
     fun getUpcomingEvents(): LiveData<List<EventEntity>>
+
+    @Query("SELECT * FROM events WHERE name LIKE :nameQuery AND isFinished = :isFinished")
+    fun searchEvent(nameQuery: String?, isFinished: Int? = 0): LiveData<List<EventEntity>>
+
+    @Query("SELECT * FROM events WHERE eventId = :eventId")
+    fun getEventDetails(eventId: Int) :LiveData<EventEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertEvents(events: List<EventEntity>)
@@ -26,7 +32,7 @@ interface EventsDao {
     @Update
     suspend fun updateEvents(events: EventEntity)
 
-    @Query ("DELETE FROM events")
+    @Query("DELETE FROM events")
     suspend fun deleteAll()
 
 }

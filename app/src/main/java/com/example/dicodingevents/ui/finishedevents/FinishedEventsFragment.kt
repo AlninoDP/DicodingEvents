@@ -6,14 +6,15 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dicodingevents.EventAdapter
-import com.example.dicodingevents.data.remote.response.ListEventsItem
+import com.example.dicodingevents.data.Result
 import com.example.dicodingevents.databinding.FragmentFinishedEventsBinding
-import com.google.android.material.snackbar.Snackbar
+import com.example.dicodingevents.ui.ViewModelFactory
 
 class FinishedEventsFragment : Fragment() {
 
@@ -27,36 +28,55 @@ class FinishedEventsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFinishedEventsBinding.inflate(inflater, container, false)
-
         (activity as AppCompatActivity).supportActionBar?.hide()
+        return binding.root
+    }
 
-        //layout manager
-        val layoutManager = LinearLayoutManager(requireActivity())
-        val searchResultLayoutManager= LinearLayoutManager(requireActivity())
-        binding.rvFinishedEvents.layoutManager = layoutManager
-        binding.rvSearchResults.layoutManager = searchResultLayoutManager
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        // Observer
-        finishedEventsViewModel.listEventsItem.observe(viewLifecycleOwner) {
-            setEventsData(it)
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(requireActivity())
+        val finishedEventViewModel by viewModels<FinishedEventsViewModel> {
+            factory
         }
-        finishedEventsViewModel.isLoading.observe(viewLifecycleOwner) {
-            showLoading(it)
-        }
-        finishedEventsViewModel.snackBarText.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let { snackBarText ->
-                Snackbar.make(
-                    binding.rvFinishedEvents,
-                    snackBarText,
-                    Snackbar.LENGTH_SHORT
-                ).show()
+
+        val eventAdapter = EventAdapter()
+
+        finishedEventViewModel.getAllEvents().observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    binding.pbFinishedEvent.visibility = View.VISIBLE
+                }
+
+                is Result.Success -> {
+                    binding.pbFinishedEvent.visibility = View.GONE
+                    finishedEventViewModel.getFinishedEvents()
+                        .observe(viewLifecycleOwner) {
+                            eventAdapter.submitList(it)
+                        }
+                    searchEvent(eventAdapter, finishedEventViewModel)
+                }
+
+                is Result.Error -> {
+                    binding.pbFinishedEvent.visibility = View.GONE
+                    Toast.makeText(
+                        context,
+                        "Terjadi kesalahan" + result.error,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
 
-        searchEvent()
+        binding.rvSearchResults.apply {
+            binding.rvSearchResults.layoutManager = LinearLayoutManager(requireActivity())
+            binding.rvSearchResults.adapter = eventAdapter
+        }
 
-
-        return binding.root
+        binding.rvFinishedEvents.apply {
+            binding.rvFinishedEvents.layoutManager = LinearLayoutManager(requireActivity())
+            binding.rvFinishedEvents.adapter = eventAdapter
+        }
     }
 
     override fun onDestroyView() {
@@ -65,36 +85,21 @@ class FinishedEventsFragment : Fragment() {
     }
 
 
-    private fun setEventsData(events: List<ListEventsItem>) {
-        val adapter = EventAdapter(events)
-        binding.rvFinishedEvents.adapter = adapter
-        binding.rvSearchResults.adapter = adapter
-    }
-
-    /// Show progress bar
-    private fun showLoading(isLoading: Boolean) {
-
-        if (isLoading) {
-            binding.progressBar2.visibility = View.VISIBLE
-            binding.pbSearchResultFinished.visibility = View.VISIBLE
-        } else {
-            binding.progressBar2.visibility = View.INVISIBLE
-            binding.pbSearchResultFinished.visibility = View.INVISIBLE
-        }
-    }
-
-    private fun searchEvent() {
+    private fun searchEvent(eventAdapter: EventAdapter, viewModel: FinishedEventsViewModel) {
         with(binding) {
-            searchView.setupWithSearchBar(binding.finishedSearchBar)
+            searchView.setupWithSearchBar(finishedSearchBar)
 
-            searchView.editText.addTextChangedListener(object :TextWatcher{
+            searchView.editText.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
                 }
 
-                override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                override fun onTextChanged(char: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     finishedSearchBar.setText(searchView.text)
-                    finishedEventsViewModel.searchFinishedEvents(s.toString())
+                    viewModel.searchEvent("%${char.toString()}%", 1)
+                        .observe(viewLifecycleOwner) {
+                            eventAdapter.submitList(it)
+                        }
                 }
 
                 override fun afterTextChanged(p0: Editable?) {
@@ -105,7 +110,7 @@ class FinishedEventsFragment : Fragment() {
 
             searchView.editText.setOnEditorActionListener { _, _, _ ->
                 finishedSearchBar.setText(searchView.text)
-                finishedEventsViewModel.searchFinishedEvents(searchView.text.toString())
+                viewModel.searchEvent(searchView.text.toString())
                 false
             }
         }

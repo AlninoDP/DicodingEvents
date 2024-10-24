@@ -1,19 +1,25 @@
 package com.example.dicodingevents
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.dicodingevents.EventListAdapter.Companion.DIFF_CALLBACK
+import com.example.dicodingevents.data.local.entity.EventEntity
 import com.example.dicodingevents.data.remote.response.ListEventsItem
 import com.example.dicodingevents.databinding.EventCardBinding
 import com.example.dicodingevents.ui.eventdetail.EventDetailActivity
 
-class EventAdapter(private val events: List<ListEventsItem>) :
-    RecyclerView.Adapter<EventAdapter.EventViewHolder>() {
+class EventAdapter() :
+    ListAdapter<EventEntity, EventAdapter.EventViewHolder>(DIFF_CALLBACK) {
+
     class EventViewHolder(private val binding: EventCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(event: ListEventsItem) {
+        fun bind(event: EventEntity) {
             Glide.with(itemView.context)
                 .load(event.mediaCover)
                 .into(binding.imgEvent)
@@ -26,8 +32,7 @@ class EventAdapter(private val events: List<ListEventsItem>) :
 
             itemView.setOnClickListener {
                 val intent = Intent(itemView.context, EventDetailActivity::class.java)
-                intent.putExtra("EVENT_ID", event.id.toString())
-                intent.putExtra("EVENT_LINK", event.link)
+                intent.putExtra(EventDetailActivity.EXTRA_EVENT_ID, event.eventId)
                 itemView.context.startActivity(intent)
             }
         }
@@ -38,12 +43,26 @@ class EventAdapter(private val events: List<ListEventsItem>) :
         return EventViewHolder(binding)
     }
 
-
-    override fun getItemCount(): Int = events.size
-
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
-        val event = events[position]
+        val event = getItem(position)
         holder.bind(event)
+    }
+
+    companion object {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<EventEntity> =
+            object : DiffUtil.ItemCallback<EventEntity>() {
+                override fun areItemsTheSame(oldItem: EventEntity, newItem: EventEntity): Boolean {
+                    return oldItem.name == newItem.name
+                }
+
+                @SuppressLint("DiffUtilEquals")
+                override fun areContentsTheSame(
+                    oldItem: EventEntity,
+                    newItem: EventEntity
+                ): Boolean {
+                    return oldItem == newItem
+                }
+            }
     }
 
 }

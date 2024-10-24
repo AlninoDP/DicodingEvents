@@ -16,6 +16,19 @@ class EventsRepository private constructor(
     private val apiService: ApiService,
     private val eventsDao:EventsDao,
 ) {
+    companion object {
+        @Volatile
+        private var instance: EventsRepository? = null
+
+        fun getInstance(
+            apiService: ApiService,
+            eventsDao: EventsDao,
+        ) : EventsRepository = instance ?: synchronized(this) {
+            instance ?: EventsRepository(apiService, eventsDao)
+        }.also {
+            instance = it
+        }
+    }
 
     fun getAllEvents(): LiveData<Result<List<EventEntity>>> = liveData {
         emit(Result.Loading)

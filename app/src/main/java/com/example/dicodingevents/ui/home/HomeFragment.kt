@@ -11,6 +11,7 @@ import com.example.dicodingevents.CarouselAdapter
 import com.example.dicodingevents.EventListAdapter
 import com.example.dicodingevents.data.remote.response.ListEventsItem
 import com.example.dicodingevents.databinding.FragmentHomeBinding
+import com.example.dicodingevents.ui.ViewModelFactory
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
 import com.google.android.material.snackbar.Snackbar
@@ -20,7 +21,10 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val homeViewModel by viewModels<HomeViewModel>()
+    private val factory: ViewModelFactory = ViewModelFactory.getInstance(requireActivity())
+    private val homeViewModel by viewModels<HomeViewModel>{
+        factory
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,6 +63,10 @@ class HomeFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onDestroyView() {

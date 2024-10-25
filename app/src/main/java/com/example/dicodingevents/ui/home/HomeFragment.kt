@@ -9,8 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.dicodingevents.CarouselAdapter
-import com.example.dicodingevents.EventListAdapter
+import com.example.dicodingevents.adapters.CarouselAdapter
+import com.example.dicodingevents.adapters.EventListAdapter
 import com.example.dicodingevents.data.Result
 import com.example.dicodingevents.databinding.FragmentHomeBinding
 import com.example.dicodingevents.ui.ViewModelFactory
@@ -24,6 +24,8 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,6 +37,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val carouselAdapter = CarouselAdapter()
         val eventListAdapter = EventListAdapter()
 
@@ -57,7 +60,7 @@ class HomeFragment : Fragment() {
                         binding.progressBarHome2.visibility = View.GONE
                         val newsData = result.data
                         Log.d("test", "tiotr ${newsData.map { it.beginTime }}")
-                        homeViewModel.getUpcomingEvents().observe(viewLifecycleOwner) { it ->
+                        homeViewModel.getUpcomingEvents().observe(viewLifecycleOwner) {
                             carouselAdapter.submitList(it)
                         }
                         homeViewModel.getFinishedEvents().observe(viewLifecycleOwner) {

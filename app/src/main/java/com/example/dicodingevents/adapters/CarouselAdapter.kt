@@ -1,4 +1,4 @@
-package com.example.dicodingevents
+package com.example.dicodingevents.adapters
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -8,27 +8,21 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.dicodingevents.EventListAdapter.Companion.DIFF_CALLBACK
 import com.example.dicodingevents.data.local.entity.EventEntity
-import com.example.dicodingevents.data.remote.response.ListEventsItem
-import com.example.dicodingevents.databinding.EventCardBinding
+import com.example.dicodingevents.databinding.CarouselItemBinding
 import com.example.dicodingevents.ui.eventdetail.EventDetailActivity
 
-class EventAdapter() :
-    ListAdapter<EventEntity, EventAdapter.EventViewHolder>(DIFF_CALLBACK) {
+class CarouselAdapter() :
+    ListAdapter<EventEntity, CarouselAdapter.CarouselViewHolder>(DIFF_CALLBACK) {
 
-    class EventViewHolder(private val binding: EventCardBinding) :
+    class CarouselViewHolder(private val binding: CarouselItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(event: EventEntity) {
             Glide.with(itemView.context)
                 .load(event.mediaCover)
-                .into(binding.imgEvent)
+                .into(binding.carouselImage)
 
-            binding.tvLocation.text = event.cityName
-            binding.tvEventStart.text = event.beginTime
-            binding.tvEventEnd.text = event.endTime
-            binding.tvEventTitle.text = event.name
-            binding.tvEventOwner.text = event.ownerName
+            binding.eventName.text = event.name
 
             itemView.setOnClickListener {
                 val intent = Intent(itemView.context, EventDetailActivity::class.java)
@@ -38,15 +32,18 @@ class EventAdapter() :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
-        val binding = EventCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return EventViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarouselViewHolder {
+        val binding =
+            CarouselItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return CarouselViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
+
+    override fun onBindViewHolder(holder: CarouselViewHolder, position: Int) {
         val event = getItem(position)
         holder.bind(event)
     }
+
 
     companion object {
         val DIFF_CALLBACK: DiffUtil.ItemCallback<EventEntity> =
@@ -64,5 +61,4 @@ class EventAdapter() :
                 }
             }
     }
-
 }

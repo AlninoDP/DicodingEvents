@@ -2,20 +2,30 @@ package com.example.dicodingevents.ui.settings
 
 import android.os.Bundle
 import android.widget.CompoundButton
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.dicodingevents.MainViewModel
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
+import com.example.dicodingevents.EventWorker
 import com.example.dicodingevents.R
 import com.example.dicodingevents.databinding.ActivitySettingsBinding
 import com.example.dicodingevents.ui.ViewModelFactory
+import java.util.concurrent.TimeUnit
 
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
+    private lateinit var workManager: WorkManager
+    private lateinit var periodicWorkRequest: PeriodicWorkRequest
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +39,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         supportActionBar?.title = getString(R.string.title_setting)
+        workManager = WorkManager.getInstance(this)
 
         val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
         val settingViewModel by viewModels<SettingsViewModel> {
@@ -45,10 +56,50 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        binding.switchTheme.setOnCheckedChangeListener{_:CompoundButton?, isChecked:Boolean ->
+        settingViewModel.getEventNotificationSetting().observe(this){
+            isEventNotificationActive: Boolean ->
+            binding.switchEventNotification.isChecked = isEventNotificationActive
+        }
+
+        binding.switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             settingViewModel.saveThemeSetting(isChecked)
         }
 
+        binding.switchEventNotification.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            when (isChecked) {
+                true -> {
+                    getEventDataPeriodically()
+                    settingViewModel.saveEventNotificationSetting(true)
+                }
+                false -> {
+                    cancelPeriodTask()
+                    settingViewModel.saveEventNotificationSetting(false)
+                }
+            }
+        }
 
+    }
+
+    private fun getEventDataPeriodically() {
+        val constraint = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        periodicWorkRequest =
+            PeriodicWorkRequest.Builder(EventWorker::class.java, 15, TimeUnit.MINUTES)
+                .setConstraints(constraint)
+                .build()
+
+        workManager.enqueue(periodicWorkRequest)
+        workManager.getWorkInfoByIdLiveData(periodicWorkRequest.id)
+            .observe(this@SettingsActivity) { workInfo ->
+                if (workInfo.state == WorkInfo.State.RUNNING) {
+                    Toast.makeText(this, "Notifikasi Dinyalakan", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    private fun cancelPeriodTask() {
+        workManager.cancelWorkById(periodicWorkRequest.id)
     }
 }

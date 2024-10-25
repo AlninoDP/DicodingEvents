@@ -1,4 +1,4 @@
-package com.example.dicodingevents
+package com.example.dicodingevents.adapters
 
 import android.annotation.SuppressLint
 import android.content.Intent

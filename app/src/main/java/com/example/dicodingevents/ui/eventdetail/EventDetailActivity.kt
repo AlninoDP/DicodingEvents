@@ -1,16 +1,12 @@
 package com.example.dicodingevents.ui.eventdetail
 
-import android.content.Context
+
 import android.content.Intent
-import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDelegate.NightMode
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.text.HtmlCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -70,8 +66,8 @@ class EventDetailActivity : AppCompatActivity() {
             .load(eventData.mediaCover)
             .into(binding.imgPosterEvent)
 
-        val totalQuota = eventData.quota ?: 0
-        val totalRegistrant = eventData.registrants ?: 0
+        val totalQuota = eventData.quota
+        val totalRegistrant = eventData.registrants
         val remainingQuota = totalQuota - totalRegistrant
 
         binding.tvEventDetailTitle.text = eventData.name

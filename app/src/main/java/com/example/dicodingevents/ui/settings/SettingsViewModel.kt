@@ -18,4 +18,14 @@ class SettingsViewModel (private val preferences: SettingPreferences): ViewModel
             preferences.saveThemeSetting(isDarkModeActive)
         }
     }
+
+    fun getEventNotificationSetting() : LiveData<Boolean> {
+        return preferences.getEventNotificationSetting().asLiveData()
+    }
+
+    fun saveEventNotificationSetting(isEventNotificationActive: Boolean) {
+        viewModelScope.launch {
+            preferences.saveEventNotificationSetting(isEventNotificationActive)
+        }
+    }
 }

@@ -9,12 +9,10 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "events")
 @Parcelize
 class EventEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    var id: Int = 0,
 
-    @ColumnInfo(name = "eventId")
-    var eventId: Int? = null,
+    @field:ColumnInfo(name = "eventId")
+    @field:PrimaryKey
+    var eventId: Int,
 
     @ColumnInfo(name = "name")
     var name: String? = null,

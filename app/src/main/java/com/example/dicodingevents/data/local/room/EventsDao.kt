@@ -11,10 +11,10 @@ import com.example.dicodingevents.data.local.entity.EventEntity
 @Dao
 interface EventsDao {
 
-    @Query("SELECT * from events ORDER BY id ASC")
+    @Query("SELECT * from events ORDER BY beginTime DESC")
     fun getAllEvents(): LiveData<List<EventEntity>>
 
-    @Query("SELECT * from events where isFinished = 1 LIMIT :limit")
+    @Query("SELECT * from events where isFinished = 1 ORDER BY beginTime DESC LIMIT :limit")
     fun getFinishedEvents(limit: Int? = 40): LiveData<List<EventEntity>>
 
     @Query("SELECT * from events where isFinished = 0 ")
@@ -26,7 +26,7 @@ interface EventsDao {
     @Query("SELECT * FROM events WHERE eventId = :eventId")
     fun getEventDetails(eventId: Int) :LiveData<EventEntity>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertEvents(events: List<EventEntity>)
 
     @Update

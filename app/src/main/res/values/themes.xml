@@ -14,6 +14,12 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="drawable_time">@drawable/ic_time</item>
+        <item name="drawable_verify_registrants">@drawable/ic_verified_registrant</item>
+        <item name="drawable_quota">@drawable/ic_quota</item>
+        <item name="drawable_registrants">@drawable/ic_registrant</item>
+        <item name="drawable_event_owner">@drawable/ic_business</item>
+
     </style>
     <style name="event_information">
         <item name="android:layout_width">wrap_content</item>
@@ -24,3 +30,4 @@
         <item name="android:drawablePadding">4dp</item>
     </style>
 </resources>
+

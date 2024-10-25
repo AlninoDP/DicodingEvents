@@ -1,16 +1,20 @@
 <resources>
     <string name="app_name">Dicoding Events</string>
     <string name="title_home">Home</string>
-
+    <string name="title_setting">Settings</string>
     <string name="title_upcoming_event">Upcoming</string>
     <string name="title_finished_event">Finished</string>
+
+    <string name="label_home">Dicoding Events</string>
+    <string name="label_upcoming">Upcoming Events</string>
+    <string name="label_finished">Finished Events</string>
 
     <string name="header_upcoming_event">Upcoming Event</string>
     <string name="sub_header_upcoming_event">Come Join Us !</string>
 
     <string name="finished_event_title">Finished Event</string>
     <string name="header_finished_event">List of Past Events</string>
-    <string name="sub_header_finished_event">This Events is Finished, Check our Upcoming Events</string>
+    <string name="sub_header_finished_event">These Events are Finished, Check our Upcoming Events</string>
 
     <string name="event_location">Location</string>
     <string name="event_start">Event Start</string>
@@ -28,4 +32,6 @@
 
     <string name="searchbar_hint">Cari Event</string>
     <string name="event_summary">Event Summary</string>
+
+    <string name="dark_theme">Dark Theme</string>
 </resources>

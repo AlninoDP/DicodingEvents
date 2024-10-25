@@ -29,7 +29,7 @@ data class ResponseEventsDetail(
 data class ListEventsItem(
 
     @field:SerializedName("id")
-    val id: Int? = null,
+    val id: Int,
 
     @field:SerializedName("name")
     val name: String? = null,

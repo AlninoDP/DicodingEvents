@@ -37,7 +37,6 @@
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/event_title"
-                android:textColor="@color/purple_500"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +47,7 @@
                 android:id="@+id/tv_event_detail_start"
                 style="@style/event_information"
                 android:text="@string/event_start"
-                app:drawableStartCompat="@drawable/ic_time"
+                app:drawableStartCompat="?attr/drawable_time"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_event_detail_title" />
 
@@ -56,7 +55,7 @@
                 android:id="@+id/tv_quota"
                 style="@style/event_information"
                 android:text="@string/event_quota"
-                app:drawableStartCompat="@drawable/ic_quota"
+                app:drawableStartCompat="?attr/drawable_quota"
                 app:layout_constraintStart_toEndOf="@+id/tv_event_detail_start"
                 app:layout_constraintTop_toBottomOf="@+id/tv_event_detail_title" />
 
@@ -64,7 +63,7 @@
                 android:id="@+id/tv_registrant"
                 style="@style/event_information"
                 android:text="@string/event_registrant"
-                app:drawableStartCompat="@drawable/ic_verified_registrant"
+                app:drawableStartCompat="?attr/drawable_verify_registrants"
                 app:layout_constraintStart_toEndOf="@+id/tv_quota"
                 app:layout_constraintTop_toBottomOf="@+id/tv_event_detail_title" />
 
@@ -72,7 +71,7 @@
                 android:id="@+id/tv_quota_remain"
                 style="@style/event_information"
                 android:text="@string/event_quota_remain"
-                app:drawableStartCompat="@drawable/ic_registrant"
+                app:drawableStartCompat="?attr/drawable_quota"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_registrant" />
 
@@ -80,7 +79,7 @@
                 android:id="@+id/tv_owner_name"
                 style="@style/event_information"
                 android:text="@string/event_owner"
-                app:drawableStartCompat="@drawable/ic_business"
+                app:drawableStartCompat="?attr/drawable_event_owner"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_quota_remain" />
 

@@ -1,9 +1,16 @@
 package com.example.dicodingevents.ui.eventdetail
 
+import android.content.Context
+import android.content.Intent
+import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.NightMode
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.text.HtmlCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -18,11 +25,9 @@ class EventDetailActivity : AppCompatActivity() {
     private var _binding: ActivityEventDetailBinding? = null
     private val binding get() = _binding!!
 
-   companion object{
-       const val EXTRA_EVENT_ID = "extra_event_id"
-   }
-
-
+    companion object {
+        const val EXTRA_EVENT_ID = "extra_event_id"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +41,7 @@ class EventDetailActivity : AppCompatActivity() {
         }
         supportActionBar?.hide()
 
+
         val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
         val eventDetailViewModel by viewModels<EventDetailViewModel> {
             factory
@@ -44,18 +50,28 @@ class EventDetailActivity : AppCompatActivity() {
         val eventId = intent.getIntExtra(EXTRA_EVENT_ID, 0)
 
 
-        eventDetailViewModel.getEventData(eventId).observe(this){
+        eventDetailViewModel.getEventData(eventId).observe(this) {
+            val eventLink = it.link
             setEventData(it)
+            binding.btnRegister.setOnClickListener{
+                val openUrlIntent = Intent(Intent.ACTION_VIEW, Uri.parse(eventLink))
+                startActivity(openUrlIntent)
+            }
         }
+
+
+
+
     }
+
 
     private fun setEventData(eventData: EventEntity) {
         Glide.with(this)
             .load(eventData.mediaCover)
             .into(binding.imgPosterEvent)
 
-        val totalQuota = eventData.quota?: 0
-        val totalRegistrant = eventData.registrants?: 0
+        val totalQuota = eventData.quota ?: 0
+        val totalRegistrant = eventData.registrants ?: 0
         val remainingQuota = totalQuota - totalRegistrant
 
         binding.tvEventDetailTitle.text = eventData.name

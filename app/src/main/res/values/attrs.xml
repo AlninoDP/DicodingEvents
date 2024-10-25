@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="drawable_time" format="reference"/>
+    <attr name="drawable_verify_registrants" format="reference"/>
+    <attr name="drawable_quota" format="reference"/>
+    <attr name="drawable_registrants" format="reference"/>
+    <attr name="drawable_event_owner" format="reference"/>
+</resources>

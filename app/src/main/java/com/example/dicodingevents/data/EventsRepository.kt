@@ -61,6 +61,9 @@ class EventsRepository private constructor(
             emit(Result.Error(e.message.toString()))
         }
 
+//        val testData = eventsDao.getAllEvents()
+//        Log.d("Test", "tuit ${testData.}")
+
         val localData: LiveData<Result<List<EventEntity>>> = eventsDao.getAllEvents().map {
             Result.Success(it)
         }
@@ -92,7 +95,7 @@ class EventsRepository private constructor(
 
         return try {
             val eventTime = dateTimeFormat.parse(beginTime)
-            val currentDateTime: Date = Date()
+            val currentDateTime = Date()
 
             currentDateTime.after(eventTime)
         } catch (e: Exception) {

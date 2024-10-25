@@ -30,7 +30,6 @@ class UpcomingEventsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentUpcomingEventsBinding.inflate(inflater, container, false)
-        (activity as AppCompatActivity).supportActionBar?.hide()
         return binding.root
     }
 

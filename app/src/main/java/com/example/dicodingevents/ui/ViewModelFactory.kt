@@ -8,6 +8,7 @@ import com.example.dicodingevents.SettingPreferences
 import com.example.dicodingevents.data.EventsRepository
 import com.example.dicodingevents.data.di.Injection
 import com.example.dicodingevents.datastore
+import com.example.dicodingevents.ui.bookmarkedevents.BookmarkedEventsViewModel
 import com.example.dicodingevents.ui.eventdetail.EventDetailViewModel
 import com.example.dicodingevents.ui.finishedevents.FinishedEventsViewModel
 import com.example.dicodingevents.ui.home.HomeViewModel
@@ -45,6 +46,8 @@ class ViewModelFactory private constructor(
             return MainViewModel(preferences) as T
         }else if (modelClass.isAssignableFrom(SettingsViewModel::class.java)){
             return SettingsViewModel(preferences) as T
+        }else if (modelClass.isAssignableFrom(BookmarkedEventsViewModel::class.java)){
+            return BookmarkedEventsViewModel(eventsRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }

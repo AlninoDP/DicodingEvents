@@ -29,6 +29,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
+        <ImageView
+            android:id="@+id/list_bookmark"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
+            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/bookmark_description"
+            android:src="@drawable/ic_bookmark"
+            android:tag="Not Saved"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
@@ -47,7 +59,7 @@
             android:text="@string/event_title"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/list_bookmark"
             app:layout_constraintStart_toEndOf="@id/guideline"
             app:layout_constraintTop_toTopOf="@+id/img_event_cover" />
 
@@ -56,10 +68,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:maxLines="2"
             android:ellipsize="end"
+            android:maxLines="2"
             android:text="@string/event_summary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guideline"

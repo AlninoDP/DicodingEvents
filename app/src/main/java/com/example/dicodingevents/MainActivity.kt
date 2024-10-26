@@ -97,9 +97,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        mainViewModel.getEventNotificationSetting().observe(this) {
-
-        }
+        mainViewModel.getEventNotificationSetting().observe(this) { }
 
 
         val navView: BottomNavigationView = binding.navView
@@ -109,7 +107,8 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.navigation_home,
                 R.id.navigation_upcoming_event,
-                R.id.navigation_finished_event
+                R.id.navigation_finished_event,
+                R.id.navigation_bookmarked_event
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

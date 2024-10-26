@@ -31,4 +31,9 @@
         android:id="@+id/mainActivity2"
         android:name="com.example.dicodingevents.MainActivity"
         android:label="MainActivity" />
+    <fragment
+        android:id="@+id/navigation_bookmarked_event"
+        android:name="com.example.dicodingevents.ui.bookmarkedevents.BookmarkedEventsFragment"
+        android:label="@string/label_bookmarked_events"
+        tools:layout="@layout/fragment_bookmarked_events" />
 </navigation>

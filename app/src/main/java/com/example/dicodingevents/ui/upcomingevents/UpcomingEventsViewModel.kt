@@ -1,14 +1,9 @@
 package com.example.dicodingevents.ui.upcomingevents
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dicodingevents.data.EventsRepository
-import com.example.dicodingevents.data.remote.response.ListEventsItem
-import com.example.dicodingevents.data.remote.retrofit.ApiConfig
-import com.example.dicodingevents.utils.Event
+import com.example.dicodingevents.data.local.entity.EventEntity
 import kotlinx.coroutines.launch
 
 class UpcomingEventsViewModel(private val eventsRepository: EventsRepository) : ViewModel() {
@@ -20,4 +15,15 @@ class UpcomingEventsViewModel(private val eventsRepository: EventsRepository) : 
     fun searchEvent(name: String?, isFinished: Int? = 0) =
         eventsRepository.searchEvents(name, isFinished)
 
+    fun bookmarkEvent(event: EventEntity) {
+        viewModelScope.launch {
+            eventsRepository.setEventsBookmark(event, true)
+        }
+    }
+
+    fun unBookmarkEvent(event: EventEntity) {
+        viewModelScope.launch {
+            eventsRepository.setEventsBookmark(event, false)
+        }
+    }
 }

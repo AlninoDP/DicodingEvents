@@ -2,7 +2,6 @@ package com.example.dicodingevents.ui.settings
 
 import android.os.Bundle
 import android.widget.CompoundButton
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -10,9 +9,9 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
-import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.example.dicodingevents.EventWorker
 import com.example.dicodingevents.R
@@ -56,10 +55,13 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        settingViewModel.getEventNotificationSetting().observe(this){
-            isEventNotificationActive: Boolean ->
-            binding.switchEventNotification.isChecked = isEventNotificationActive
-        }
+        settingViewModel.getEventNotificationSetting()
+            .observe(this) { isEventNotificationActive: Boolean ->
+                binding.switchEventNotification.isChecked = isEventNotificationActive
+                if (isEventNotificationActive) {
+                    getEventDataPeriodically()
+                }
+            }
 
         binding.switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
             settingViewModel.saveThemeSetting(isChecked)
@@ -71,6 +73,7 @@ class SettingsActivity : AppCompatActivity() {
                     getEventDataPeriodically()
                     settingViewModel.saveEventNotificationSetting(true)
                 }
+
                 false -> {
                     cancelPeriodTask()
                     settingViewModel.saveEventNotificationSetting(false)
@@ -86,20 +89,19 @@ class SettingsActivity : AppCompatActivity() {
             .build()
 
         periodicWorkRequest =
-            PeriodicWorkRequest.Builder(EventWorker::class.java, 15, TimeUnit.MINUTES)
+            PeriodicWorkRequest.Builder(EventWorker::class.java, 1, TimeUnit.DAYS)
                 .setConstraints(constraint)
                 .build()
 
-        workManager.enqueue(periodicWorkRequest)
-        workManager.getWorkInfoByIdLiveData(periodicWorkRequest.id)
-            .observe(this@SettingsActivity) { workInfo ->
-                if (workInfo.state == WorkInfo.State.RUNNING) {
-                    Toast.makeText(this, "Notifikasi Dinyalakan", Toast.LENGTH_SHORT).show()
-                }
-            }
+        workManager.enqueueUniquePeriodicWork(
+            "EventNotificationWork",
+            ExistingPeriodicWorkPolicy.KEEP, // Keep existing work if already enqueued
+            periodicWorkRequest
+        )
     }
 
     private fun cancelPeriodTask() {
-        workManager.cancelWorkById(periodicWorkRequest.id)
+        workManager.cancelUniqueWork("EventNotificationWork")
+//      workManager.cancelAllWork()
     }
 }

@@ -37,7 +37,14 @@ class FinishedEventsFragment : Fragment() {
             factory
         }
 
-        val eventAdapter = EventAdapter()
+        val eventAdapter = EventAdapter {
+            eventEntity ->
+            if (eventEntity.isBookmarked){
+                finishedEventViewModel.unBookmarkEvent(eventEntity)
+            } else {
+                finishedEventViewModel.bookmarkEvent(eventEntity)
+            }
+        }
 
         finishedEventViewModel.getAllEvents().observe(viewLifecycleOwner) { result ->
             when (result) {

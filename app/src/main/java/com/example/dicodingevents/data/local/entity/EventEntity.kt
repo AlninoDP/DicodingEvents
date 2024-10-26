@@ -52,4 +52,8 @@ class EventEntity(
 
     @ColumnInfo(name = "isFinished")
     val isFinished: Boolean = false,
+
+    @ColumnInfo(name = "isBookmarked")
+    var isBookmarked: Boolean = false,
+
 ) : Parcelable

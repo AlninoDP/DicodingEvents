@@ -37,6 +37,7 @@ class EventsRepository private constructor(
             val events = response.listEvents
             val eventList = events.map { event ->
                 val isFinished = isEventFinished(event.beginTime)
+                val isBookmarked = eventsDao.isEventBookmarked(event.name!!)
                 EventEntity(
                     eventId = event.id,
                     name = event.name,
@@ -52,6 +53,7 @@ class EventsRepository private constructor(
                     endTime = event.endTime,
                     link = event.link,
                     isFinished = isFinished,
+                    isBookmarked = isBookmarked
                 )
             }
             eventsDao.deleteAll()
@@ -61,13 +63,19 @@ class EventsRepository private constructor(
             emit(Result.Error(e.message.toString()))
         }
 
-//        val testData = eventsDao.getAllEvents()
-//        Log.d("Test", "tuit ${testData.}")
-
         val localData: LiveData<Result<List<EventEntity>>> = eventsDao.getAllEvents().map {
             Result.Success(it)
         }
         emitSource(localData)
+    }
+
+    fun getBookmarkedEvent() :LiveData<List<EventEntity>>{
+        return eventsDao.getBookmarkedEvents()
+    }
+
+    suspend fun setEventsBookmark(event: EventEntity, bookmarkState: Boolean) {
+        event.isBookmarked = bookmarkState
+        eventsDao.updateEvents(event)
     }
 
     fun getEventDetail(eventId: Int):  LiveData<EventEntity> {

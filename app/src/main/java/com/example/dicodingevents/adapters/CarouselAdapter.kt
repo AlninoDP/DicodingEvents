@@ -1,3 +1,5 @@
+@file:Suppress("unused", "unused")
+
 package com.example.dicodingevents.adapters
 
 import android.annotation.SuppressLint
@@ -12,7 +14,7 @@ import com.example.dicodingevents.data.local.entity.EventEntity
 import com.example.dicodingevents.databinding.CarouselItemBinding
 import com.example.dicodingevents.ui.eventdetail.EventDetailActivity
 
-class CarouselAdapter() :
+class CarouselAdapter  :
     ListAdapter<EventEntity, CarouselAdapter.CarouselViewHolder>(DIFF_CALLBACK) {
 
     class CarouselViewHolder(private val binding: CarouselItemBinding) :

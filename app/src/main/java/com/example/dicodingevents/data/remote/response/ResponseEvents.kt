@@ -14,18 +14,6 @@ data class ResponseEvents(
     val listEvents: List<ListEventsItem>,
 )
 
-data class ResponseEventsDetail(
-
-    @field:SerializedName("error")
-    val error: Boolean? = null,
-
-    @field:SerializedName("message")
-    val message: String? = null,
-
-    @field:SerializedName("event")
-    val event: ListEventsItem,
-)
-
 data class ListEventsItem(
 
     @field:SerializedName("id")

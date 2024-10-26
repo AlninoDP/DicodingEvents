@@ -36,7 +36,14 @@ class UpcomingEventsFragment : Fragment() {
         val upcomingEventViewModel by viewModels<UpcomingEventsViewModel> {
             factory
         }
-        val eventAdapter = EventAdapter()
+        val eventAdapter = EventAdapter {
+                eventEntity ->
+            if (eventEntity.isBookmarked){
+                upcomingEventViewModel.unBookmarkEvent(eventEntity)
+            } else {
+                upcomingEventViewModel.bookmarkEvent(eventEntity)
+            }
+        }
 
         upcomingEventViewModel.getAllEvents().observe(viewLifecycleOwner) { result ->
             when (result) {
@@ -111,5 +118,6 @@ class UpcomingEventsFragment : Fragment() {
             }
         }
     }
+
 
 }

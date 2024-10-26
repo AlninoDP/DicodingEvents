@@ -1,7 +1,6 @@
 package com.example.dicodingevents.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,14 +36,20 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val carouselAdapter = CarouselAdapter()
-        val eventListAdapter = EventListAdapter()
-
         val factory: ViewModelFactory = ViewModelFactory.getInstance(requireActivity())
 
         val homeViewModel by viewModels<HomeViewModel> {
             factory
+        }
+
+        val carouselAdapter = CarouselAdapter()
+        val eventListAdapter = EventListAdapter{
+                eventEntity ->
+            if (eventEntity.isBookmarked){
+                homeViewModel.unBookmarkEvent(eventEntity)
+            } else {
+                homeViewModel.bookmarkEvent(eventEntity)
+            }
         }
 
         homeViewModel.getAllEvents().observe(viewLifecycleOwner) { result ->
@@ -58,13 +63,10 @@ class HomeFragment : Fragment() {
                     is Result.Success -> {
                         binding.progressBarHome1.visibility = View.GONE
                         binding.progressBarHome2.visibility = View.GONE
-                        val newsData = result.data
-                        Log.d("test", "tiotr ${newsData.map { it.beginTime }}")
                         homeViewModel.getUpcomingEvents().observe(viewLifecycleOwner) {
                             carouselAdapter.submitList(it)
                         }
                         homeViewModel.getFinishedEvents().observe(viewLifecycleOwner) {
-                            Log.d("test", "teter ${it.map { it.beginTime }}")
                             eventListAdapter.submitList(it)
                         }
 

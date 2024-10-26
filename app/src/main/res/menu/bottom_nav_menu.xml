@@ -16,4 +16,8 @@
         android:icon="@drawable/ic_event_finished"
         android:title="@string/title_finished_event" />
 
+    <item
+        android:id="@+id/navigation_bookmarked_event"
+        android:icon="@drawable/ic_bookmarks"
+        android:title="@string/title_bookmarked_event"/>
 </menu>

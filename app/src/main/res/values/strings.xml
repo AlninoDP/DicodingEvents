@@ -4,16 +4,16 @@
     <string name="title_setting">Settings</string>
     <string name="title_upcoming_event">Upcoming</string>
     <string name="title_finished_event">Finished</string>
+    <string name="title_bookmarked_event">Bookmarked</string>
 
     <string name="label_home">Dicoding Events</string>
     <string name="label_upcoming">Upcoming Events</string>
     <string name="label_finished">Finished Events</string>
+    <string name="label_bookmarked_events">Bookmarked Events</string>
 
     <string name="header_upcoming_event">Upcoming Event</string>
-    <string name="sub_header_upcoming_event">Come Join Us !</string>
 
     <string name="finished_event_title">Finished Event</string>
-    <string name="header_finished_event">List of Past Events</string>
     <string name="sub_header_finished_event">These Events are Finished, Check our Upcoming Events</string>
 
     <string name="event_location">Location</string>
@@ -28,6 +28,7 @@
     <string name="register_event">Register</string>
 
     <string name="image_description">Event Image</string>
+    <string name="bookmark_description">Bookmark Icon</string>
     <string name="divider_text">-</string>
 
     <string name="searchbar_hint">Cari Event</string>

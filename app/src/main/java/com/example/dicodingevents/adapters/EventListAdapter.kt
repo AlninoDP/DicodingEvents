@@ -1,11 +1,9 @@
 package com.example.dicodingevents.adapters
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -13,9 +11,10 @@ import com.example.dicodingevents.R
 import com.example.dicodingevents.data.local.entity.EventEntity
 import com.example.dicodingevents.databinding.EventListItemBinding
 import com.example.dicodingevents.ui.eventdetail.EventDetailActivity
+import com.example.dicodingevents.utils.EventDiffCallback
 
 class EventListAdapter(private val onBookmarkClick: (EventEntity) -> Unit) :
-    ListAdapter<EventEntity, EventListAdapter.EventListViewHolder>(DIFF_CALLBACK) {
+    ListAdapter<EventEntity, EventListAdapter.EventListViewHolder>(EventDiffCallback()) {
 
     class EventListViewHolder(val binding: EventListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -66,23 +65,5 @@ class EventListAdapter(private val onBookmarkClick: (EventEntity) -> Unit) :
         ivBookmark.setOnClickListener {
             onBookmarkClick(event)
         }
-    }
-
-
-    companion object {
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<EventEntity> =
-            object : DiffUtil.ItemCallback<EventEntity>() {
-                override fun areItemsTheSame(oldItem: EventEntity, newItem: EventEntity): Boolean {
-                    return oldItem.name == newItem.name
-                }
-
-                @SuppressLint("DiffUtilEquals")
-                override fun areContentsTheSame(
-                    oldItem: EventEntity,
-                    newItem: EventEntity
-                ): Boolean {
-                    return oldItem == newItem
-                }
-            }
     }
 }

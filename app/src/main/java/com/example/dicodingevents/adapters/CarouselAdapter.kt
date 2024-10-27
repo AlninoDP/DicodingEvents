@@ -1,21 +1,18 @@
-@file:Suppress("unused", "unused")
-
 package com.example.dicodingevents.adapters
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.dicodingevents.data.local.entity.EventEntity
 import com.example.dicodingevents.databinding.CarouselItemBinding
 import com.example.dicodingevents.ui.eventdetail.EventDetailActivity
+import com.example.dicodingevents.utils.EventDiffCallback
 
-class CarouselAdapter  :
-    ListAdapter<EventEntity, CarouselAdapter.CarouselViewHolder>(DIFF_CALLBACK) {
+class CarouselAdapter :
+    ListAdapter<EventEntity, CarouselAdapter.CarouselViewHolder>(EventDiffCallback()) {
 
     class CarouselViewHolder(private val binding: CarouselItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -44,23 +41,5 @@ class CarouselAdapter  :
     override fun onBindViewHolder(holder: CarouselViewHolder, position: Int) {
         val event = getItem(position)
         holder.bind(event)
-    }
-
-
-    companion object {
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<EventEntity> =
-            object : DiffUtil.ItemCallback<EventEntity>() {
-                override fun areItemsTheSame(oldItem: EventEntity, newItem: EventEntity): Boolean {
-                    return oldItem.name == newItem.name
-                }
-
-                @SuppressLint("DiffUtilEquals")
-                override fun areContentsTheSame(
-                    oldItem: EventEntity,
-                    newItem: EventEntity
-                ): Boolean {
-                    return oldItem == newItem
-                }
-            }
     }
 }

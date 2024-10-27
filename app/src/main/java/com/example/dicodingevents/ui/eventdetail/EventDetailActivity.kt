@@ -15,6 +15,7 @@ import com.example.dicodingevents.R
 import com.example.dicodingevents.data.local.entity.EventEntity
 import com.example.dicodingevents.databinding.ActivityEventDetailBinding
 import com.example.dicodingevents.ui.ViewModelFactory
+import java.util.Locale
 
 class EventDetailActivity : AppCompatActivity() {
 
@@ -72,9 +73,9 @@ class EventDetailActivity : AppCompatActivity() {
 
         binding.tvEventDetailTitle.text = eventData.name
         binding.tvEventDetailStart.text = eventData.beginTime
-        binding.tvQuota.text = totalQuota.toString()
-        binding.tvRegistrant.text = totalRegistrant.toString()
-        binding.tvQuotaRemain.text = "Quota Tersisa: $remainingQuota"
+        binding.tvQuota.text = String.format(Locale.getDefault(),"%d", totalQuota)
+        binding.tvRegistrant.text = String.format(Locale.getDefault(),"%d", totalRegistrant)
+        binding.tvQuotaRemain.text = getString(R.string.remaining_quota_text, remainingQuota)
         binding.tvOwnerName.text = eventData.ownerName
         binding.tvEventDescription.text = HtmlCompat.fromHtml(
             eventData.description.toString(),

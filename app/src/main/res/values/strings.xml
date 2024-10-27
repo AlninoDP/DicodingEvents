@@ -36,4 +36,6 @@
 
     <string name="dark_theme">Dark Theme</string>
     <string name="notification_settings">Notification Settings</string>
+
+    <string name="remaining_quota_text">Remaining Quota: %1$d</string>
 </resources>

@@ -64,7 +64,7 @@ class EventsRepository private constructor(
         }
 
         val localData: LiveData<Result<List<EventEntity>>> = eventsDao.getAllEvents().map {
-            Result.Success(it)
+            Result.Success()
         }
         emitSource(localData)
     }
